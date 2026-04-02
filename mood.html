@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .mood-button {
+            font-size: 2rem;       
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .mood-button:hover {
+            transform: scale(1.2);
+        }
+
+        .mood-label {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 3px;
+            text-align: center;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: none;
+            white-space: nowrap;
+        }
+
+        .mood-button:hover .tooltip {
+            display: block;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #d1fae5;
+            color: #065f46;
+            font-weight: 500;
+        }
+
+        .save-btn {
+            margin-top: 15px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1>How do you feel today?</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+<form method="POST">
+    <div>
+        <button class="mood-button" type="submit" name="mood_score" value="5">
+            😍
+            <span class="mood-label">Very Happy</span>
+            <span class="tooltip">Feeling very joyful, energetic</span>
+        </button>
+        <button class="mood-button" type="submit" name="mood_score" value="4">
+            😄
+            <span class="mood-label">Happy</span>
+            <span class="tooltip">Feeling positive and cheerful</span>
+        </button>
+        <button class="mood-button" type="submit" name="mood_score" value="3">
+            🙂
+            <span class="mood-label">Content</span>
+            <span class="tooltip">Feeling okay, slight happiness</span>
+        </button>
+        <button class="mood-button" type="submit" name="mood_score" value="2">
+            😔
+            <span class="mood-label">Sad</span>
+            <span class="tooltip">Feeling a bit down or upset</span>
+        </button>
+        <button class="mood-button" type="submit" name="mood_score" value="1">
+            😭
+            <span class="mood-label">Very Sad</span>
+            <span class="tooltip">Feeling very low or overwhelmed</span>
+        </button>
+    </div>
+
+    <!-- Optional Save button if user wants to click manually -->
+    <button type="submit" class="save-btn">💾 Save Mood</button>
+</form>
+
+<br>
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+</body>
+</html>

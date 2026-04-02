@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wellness Score</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+body{
+color:#222;
+}
+
+.card{
+background:#f0f8ff;
+padding:14px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:1px 1px 6px #aaa;
+color:#222;
+font-size:15px;
+}
+
+.score-box{
+font-size:42px;
+padding:25px;
+margin:15px 0;
+text-align:center;
+border-radius:12px;
+color:white;
+font-weight:bold;
+}
+
+.low{
+background:#f44336;
+}
+
+.medium{
+background:#ff9800;
+}
+
+.high{
+background:#4caf50;
+}
+
+.section-title{
+margin-top:20px;
+font-size:20px;
+font-weight:bold;
+color:#222;
+}
+
+.suggestion{
+background:#fff8dc;
+padding:14px;
+border-radius:10px;
+margin:12px 0;
+color:#222;
+font-size:15px;
+}
+
+ul{
+margin-top:8px;
+padding-left:20px;
+}
+
+li{
+margin:5px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎯 Wellness Score</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+<!-- Wellness Score Calculation -->
+
+{% set total_activities = 6 %}
+{% set completed_activities = 
+   (1 if activities.mood else 0) +
+   (1 if activities.meditation else 0) +
+   (1 if activities.sleep else 0) +
+   (1 if activities.journal else 0) +
+   (1 if activities.water else 0) +
+   (1 if activities.habit else 0) 
+%}
+
+{% set score = (completed_activities / total_activities * 100)|round %}
+
+{% if score < 50 %}
+
+<div class="score-box low">
+{{ score }} / 100
+<br>
+<span style="font-size:16px">⚠ Needs Improvement</span>
+</div>
+
+{% elif score < 75 %}
+
+<div class="score-box medium">
+{{ score }} / 100
+<br>
+<span style="font-size:16px">🙂 Good Progress</span>
+</div>
+
+{% else %}
+
+<div class="score-box high">
+{{ score }} / 100
+<br>
+<span style="font-size:16px">🌟 Excellent Wellness</span>
+</div>
+
+{% endif %}
+
+
+<!-- Suggestions -->
+
+<div class="section-title">🌿 What You Can Improve Today</div>
+
+{% if suggestions %}
+
+{% for s in suggestions %}
+
+<div class="card">
+{{ s }}
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="card">
+🎉 Great! Your habits look balanced today. Keep maintaining them.
+</div>
+
+{% endif %}
+
+
+
+<!-- Tomorrow Tips -->
+
+<div class="section-title">🌙 Tips for Tomorrow</div>
+
+<div class="suggestion">
+
+<ul>
+
+{% for t in tomorrow_tips %}
+
+<li>{{ t }}</li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+
+
+<!-- Extra Reminder -->
+
+<div class="suggestion">
+
+💡 <b>Daily Wellness Reminder</b>
+
+<ul>
+
+<li>💧 Drink enough water (7–8 glasses)</li>
+
+<li>🌙 Sleep at least 7 hours</li>
+
+<li>🧘 Practice 5 minutes meditation</li>
+
+<li>📓 Write one positive thought in your journal</li>
+
+</ul>
+
+</div>
+
+<br>
+
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

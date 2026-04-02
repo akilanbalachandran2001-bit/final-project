@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Mental Wellness Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #5f9cff, #7f53ac, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 320px;
+        }
+        h1 {
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        input[type=text], input[type=password] {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        button {
+            width: 95%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #22c55e, #4ade80);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .error {
+            background: #fecaca;
+            color: #7f1d1d;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        p {
+            margin: 10px 0 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1>📝 Create Account</h1>
+
+{% if message %}
+<div class="{% if 'successful' in message %}success{% else %}error{% endif %}">{{ message }}</div>
+{% endif %}
+
+<form method="POST">
+    <input type="text" name="username" placeholder="Enter Username" required><br>
+    <input type="password" name="password" placeholder="Enter Password" required><br>
+    <input type="password" name="confirm" placeholder="Confirm Password" required><br>
+    <button type="submit">Register</button>
+</form>
+
+<p>Already have an account?</p>
+<a href="{{ url_for('login') }}">Login</a>
+
+</div>
+</body>
+</html>

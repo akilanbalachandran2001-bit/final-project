@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Meditation</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+.tip-box{
+background:white;
+color:#333;
+padding:12px;
+border-radius:12px;
+margin:10px 0;
+font-weight:500;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.guide-box{
+background:#fef3c7;
+color:#333;
+padding:12px;
+border-radius:12px;
+margin:10px 0;
+font-size:15px;
+line-height:1.6;
+}
+
+.breath-circle{
+width:140px;
+height:140px;
+border-radius:50%;
+margin:20px auto;
+background:linear-gradient(135deg,#34d399,#22c55e);
+animation:breath 8s infinite;
+}
+
+@keyframes breath{
+0%{transform:scale(1);}
+50%{transform:scale(1.4);}
+100%{transform:scale(1);}
+}
+
+.message {
+    margin: 10px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #d1fae5;
+    color: #065f46;
+    font-weight: 500;
+}
+
+.save-btn {
+    margin-top: 15px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background-color: #45a049;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧘 Meditation</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+<div class="tip-box">
+💡 <b>Meditation Tip:</b> Focus on breathing slowly and relax your mind.
+</div>
+
+<h3>🫁 Breathing Exercise</h3>
+<div class="breath-circle"></div>
+
+<div class="guide-box">
+<b>Quick Meditation Guide</b><br><br>
+🫁 Inhale deeply for <b>4 seconds</b><br>
+⏸ Hold breath for <b>4 seconds</b><br>
+🌬 Exhale slowly for <b>4 seconds</b><br><br>
+Repeat this cycle for 2-5 minutes to calm your mind.
+</div>
+
+<h3>⏱ Meditation Timer</h3>
+<div class="timer" id="timer">60</div>
+<button onclick="startTimer()">Start</button>
+
+<!-- Form to save meditation activity -->
+<form method="POST">
+    <input type="hidden" name="duration" value="5"> <!-- example duration in minutes -->
+    <button type="submit" class="save-btn">💾 Save Meditation</button>
+</form>
+
+<script>
+let time = 60;
+let running = false;
+
+function startTimer(){
+    if(running) return;
+    running = true;
+
+    let interval = setInterval(function(){
+        time--;
+        document.getElementById("timer").innerText = time;
+
+        if(time <= 0){
+            clearInterval(interval);
+            alert("Meditation complete 🧘");
+            running = false;
+            time = 60;
+            document.getElementById("timer").innerText = time;
+        }
+    },1000)
+}
+</script>
+
+<br>
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

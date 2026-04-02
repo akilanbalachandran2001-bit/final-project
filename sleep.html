@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sleep Tracker</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.card{
+background:#f0f8ff;
+padding:12px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:1px 1px 6px #aaa;
+color:#333;
+}
+
+.recommendation{
+background:#fff8dc;
+padding:12px;
+border-radius:8px;
+margin:12px 0;
+font-style:italic;
+color:#333;
+font-size:15px;
+}
+
+.tip{
+background:#f0fff4;
+padding:10px;
+border-radius:8px;
+margin:10px 0;
+color:#333;
+}
+
+textarea,input,select{
+width:100%;
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+margin-top:5px;
+color:#333;
+}
+
+button{
+padding:8px 14px;
+background:#4caf50;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background:#43a047;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #d1fae5;
+    color: #065f46;
+    font-weight: 500;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌙 Sleep Tracker</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+<!-- Sleep Recommendation -->
+
+<div class="recommendation">
+
+{% if mood_score %}
+
+{% if mood_score <= 2 %}
+😴 Your mood seems low. Try getting **8 hours of sleep** tonight to recover better.
+
+{% elif mood_score == 3 %}
+🌙 Aim for **7–8 hours of sleep** to keep your mind balanced.
+
+{% else %}
+😃 Great mood! Maintain it by getting **7 hours of quality sleep**.
+
+{% endif %}
+
+{% else %}
+
+💡 Adults usually need **7–9 hours of sleep** for good mental health.
+
+{% endif %}
+
+</div>
+
+<div class="tip">
+
+🧠 Sleep Tip:  
+Avoid phone screens before bed and keep your room dark and cool.
+
+</div>
+
+<!-- Sleep Form -->
+
+<form method="POST">
+
+<div class="card">
+
+<label>😴 Hours Slept</label>
+<input type="number" name="hours" placeholder="Enter hours slept" min="0" max="24">
+
+</div>
+
+<div class="card">
+
+<label>🌙 Sleep Quality</label>
+<select name="quality">
+<option>Excellent</option>
+<option>Good</option>
+<option>Average</option>
+<option>Poor</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<label>📵 Pre-Sleep Habits</label>
+<input type="checkbox" name="phone_off"> Avoided phone before bed<br>
+<input type="checkbox" name="breathing"> Did breathing exercise<br>
+<input type="checkbox" name="warm_drink"> Drank warm water / milk<br>
+<input type="checkbox" name="read_book"> Read a book before sleep
+
+</div>
+
+<div class="card">
+
+<label>✍️ Morning Reflection</label>
+<textarea name="reflection" rows="3" placeholder="How do you feel after waking up?"></textarea>
+
+</div>
+
+<!-- Hidden field to notify backend to update score -->
+<input type="hidden" name="update_score" value="1">
+
+<button type="submit">💾 Save Sleep Data</button>
+
+</form>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+<br>
+
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

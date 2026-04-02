@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .card{
+            background:white;
+            color:#333;
+            padding:10px;
+            margin:6px 0;
+            border-radius:8px;
+            box-shadow:1px 1px 5px #aaa;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .habit-input{
+            padding:6px;
+            margin-right:5px;
+            border-radius:6px;
+            border:1px solid #ccc;
+        }
+
+        .btn{
+            padding:6px 10px;
+            border:none;
+            background:#4caf50;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .btn:hover{
+            background:#45a049;
+        }
+
+        .recommendation{
+            background:#fff8dc;
+            color:#333;
+            padding:8px;
+            border-radius:8px;
+            margin:10px 0;
+            font-style:italic;
+        }
+
+        h3{
+            margin-top:20px;
+            color:#333;
+            font-weight:600;
+        }
+
+        .progress-box{
+            background:white;
+            color:#333;
+            padding:10px;
+            margin-top:15px;
+            border-radius:10px;
+            box-shadow:1px 1px 5px #aaa;
+        }
+
+        .progress-container{
+            width:100%;
+            background:#e5e5e5;
+            border-radius:10px;
+            height:20px;
+            margin-top:6px;
+            overflow:hidden;
+        }
+
+        .progress-bar{
+            height:100%;
+            width:0%;
+            background:linear-gradient(90deg,#22c55e,#4ade80);
+            color:white;
+            font-size:12px;
+            text-align:center;
+            line-height:20px;
+            font-weight:bold;
+        }
+
+        .card span{
+            color:#333;
+            font-weight:500;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #d1fae5;
+            color: #065f46;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>📅 Daily Habit Tracker</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+<div class="recommendation">
+💡 Recommended for today:
+{% for h in recommended_habits %}
+{{ h }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+</div>
+
+<h3>Daily Routine</h3>
+<form method="POST" id="habitForm">
+<div id="habitList">
+
+<!-- Recommended habits first -->
+{% for habit in recommended_habits %}
+<div class="card">
+    <span>{{ habit }}</span>
+    <input type="checkbox" name="completed_habits" value="{{ habit }}"
+    {% for h, done in habits %}
+        {% if h == habit and done %}checked{% endif %}
+    {% endfor %}>
+</div>
+{% endfor %}
+
+<!-- User added habits -->
+{% for habit, done in habits %}
+<div class="card">
+    <span>{{ habit }}</span>
+    <input type="checkbox" name="completed_habits" value="{{ habit }}" {% if done %}checked{% endif %}>
+</div>
+{% endfor %}
+</div>
+
+<h3>Add Your Own Habit</h3>
+<input class="habit-input" type="text" id="newHabit" placeholder="Type your habit">
+<button type="button" class="btn" onclick="addCustomHabit()">Add Habit</button>
+
+<div class="progress-box">
+<h3>📊 Completion Progress</h3>
+<div class="progress-container">
+<div class="progress-bar" id="progressBar">0%</div>
+</div>
+</div>
+
+<div class="progress-box">
+⭐ Streak: <span id="streak">0</span> habits today
+</div>
+
+<input type="hidden" name="habit_name" id="habit_name_hidden" value="">
+<button type="submit" style="margin-top:10px; padding:10px 15px; background:#4caf50; color:white; border:none; border-radius:6px;">Save Progress</button>
+</form>
+
+<br>
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+
+<script>
+const progressBar = document.getElementById("progressBar")
+const streak = document.getElementById("streak")
+const habitList = document.getElementById("habitList")
+const hiddenHabitInput = document.getElementById("habit_name_hidden")
+
+function updateProgress(){
+    const checkboxes = habitList.querySelectorAll("input[type='checkbox']")
+    const total = checkboxes.length
+    let completed = 0
+    checkboxes.forEach(cb=>{
+        if(cb.checked) completed++
+    })
+    let percent = total ? Math.round((completed/total)*100) : 0
+    progressBar.style.width = percent + "%"
+    progressBar.innerText = percent + "%"
+    streak.innerText = completed
+}
+
+// Initial update
+updateProgress()
+
+// Update progress on checkbox change
+document.addEventListener("change", function(e){
+    if(e.target.type==="checkbox") updateProgress()
+})
+
+// Add custom habit dynamically
+function addCustomHabit(){
+    const habitInput = document.getElementById("newHabit")
+    const habitName = habitInput.value.trim()
+    if(!habitName) return
+
+    // Add habit visually
+    const div = document.createElement("div")
+    div.className = "card"
+    div.innerHTML = `<span>${habitName}</span>
+        <input type="checkbox" name="completed_habits" value="${habitName}">`
+    habitList.appendChild(div)
+
+    // Save the habit name for Flask route
+    hiddenHabitInput.value = habitName
+
+    habitInput.value = ""
+    updateProgress()
+}
+</script>
+
+</body>
+</html>

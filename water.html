@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Water Tracker</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.card{
+background:#f0f8ff;
+padding:12px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:1px 1px 6px #aaa;
+color:#333;
+}
+
+.recommendation{
+background:#fff8dc;
+padding:12px;
+border-radius:8px;
+margin:12px 0;
+font-size:15px;
+color:#333;
+}
+
+.tip{
+background:#f0fff4;
+padding:10px;
+border-radius:8px;
+margin:10px 0;
+color:#333;
+}
+
+.counter{
+font-size:42px;
+font-weight:bold;
+margin:15px 0;
+}
+
+button{
+padding:8px 14px;
+background:#4caf50;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin:5px;
+}
+
+button:hover{
+background:#43a047;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #d1fae5;
+    color: #065f46;
+    font-weight: 500;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💧 Water Tracker</h1>
+
+<p class="quote">🌟 {{ quote }}</p>
+
+<!-- Recommendation -->
+
+<div class="recommendation">
+💡 Health experts recommend drinking **7–8 glasses of water daily** to stay hydrated and maintain energy levels.
+</div>
+
+<div class="tip">
+🧠 Hydration Tip:  
+Drink one glass of water after waking up and another before each meal.
+</div>
+
+<!-- Water Counter with Save -->
+
+<form method="POST">
+
+<div class="card">
+
+<h3>Glasses Drank Today</h3>
+
+<div class="counter" id="count">0</div>
+
+<input type="hidden" name="glasses" id="glasses" value="0">
+<button type="button" onclick="add()">+1 Glass</button>
+<button type="button" onclick="remove()">-1 Glass</button>
+
+</div>
+
+<!-- Hidden field for backend to register activity completion -->
+<input type="hidden" name="update_score" value="1">
+
+<button type="submit">💾 Save Water Intake</button>
+
+</form>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+<br>
+<a class="back" href="{{ url_for('dashboard') }}">⬅ Back</a>
+
+</div>
+
+<script>
+
+let count = 0;
+
+function add(){
+    count++;
+    document.getElementById("count").innerText = count;
+    document.getElementById("glasses").value = count;
+}
+
+function remove(){
+    if(count>0){
+        count--;
+        document.getElementById("count").innerText = count;
+        document.getElementById("glasses").value = count;
+    }
+}
+
+</script>
+
+</body>
+</html>
